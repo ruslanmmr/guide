@@ -4,9 +4,13 @@ section.section.home
     .home__container.row
       svg.home__gbg(width='396', height='423', viewBox='0 0 396 423', fill='none', xmlns='http://www.w3.org/2000/svg')
         path(opacity='0.4', d='M301.965 205.073H388.407V371.001C366.212 387.75 340.513 400.604 311.31 409.562C282.106 418.521 252.708 423 223.115 423C180.673 423 142.513 414.041 108.637 396.124C74.7611 377.818 48.0885 352.695 28.6195 320.756C9.53982 288.427 0 252.008 0 211.5C0 170.992 9.53982 134.768 28.6195 102.829C48.0885 70.5 74.9558 45.377 109.221 27.4599C143.487 9.15328 182.035 0 224.867 0C260.69 0 293.204 6.03729 322.407 18.1119C351.611 30.1865 376.142 47.714 396 70.6947L335.257 126.783C306.053 96.0124 270.814 80.6271 229.54 80.6271C203.451 80.6271 180.283 86.0801 160.035 96.9862C139.788 107.892 124.018 123.278 112.726 143.142C101.434 163.007 95.7876 185.793 95.7876 211.5C95.7876 236.818 101.434 259.409 112.726 279.273C124.018 299.138 139.593 314.718 159.451 326.014C179.699 336.92 202.673 342.373 228.372 342.373C255.628 342.373 280.159 336.53 301.965 324.845V205.073Z', fill='#FBF7F6')
-      .home__content.col-xl-5
+      .home__content.col-xl-5.col-sm-6.col-12
         h1.home__title.t-size-42.decorated.home__item Guide Girls<br> Out Moscow
-        h2.home__sub-title.t-size-24.home__item Гид по лучшим<br> ресторанам Москвы
+        .home__sub-title.t-size-24.home__item Гид по лучшим<br> ресторанам Москвы
+        .home__m-image.home__item
+          .home__img-cover
+            .cover-box
+              img(data-src="img/home.jpg", alt="").lazy
         .home__price.home__item
           .home__price-container
             span.old-price 299 Р
@@ -19,14 +23,17 @@ section.section.home
             span только 3 дня!
           .discount-timer__container
             .discount-timer__top
-              span.days 00
-              span.hours 00
-              span.minutes 00
+              span.days 
+                span 00
+              span.hours 
+                span 00
+              span.minutes 
+                span 00
             .discount-timer__bottom
               span Дней
               span Часов
               span Минут
-      .col-xl-7
+      .col-xl-7.col-sm-6.home__image-d
         .home__m-img
           .home__img-cover
             .cover-box

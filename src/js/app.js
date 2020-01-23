@@ -1,9 +1,10 @@
+window.$ = window.jQuery = require('jquery');
+
 import device from 'current-device';
 import Scrollbar from 'smooth-scrollbar';
 import { gsap } from "gsap";
-import Lazy from "jquery-lazy";
+window.Lazy = require('jquery-lazy');
 import slick from "slick-carousel";
-import Parallax from 'parallax-js';
 
 var module,countdown=function(v){function A(a,b){var c=a.getTime();a.setMonth(a.getMonth()+b);return Math.round((a.getTime()-c)/864E5)}function w(a){var b=a.getTime(),c=new Date(b);c.setMonth(a.getMonth()+1);return Math.round((c.getTime()-b)/864E5)}function x(a,b){b=b instanceof Date||null!==b&&isFinite(b)?new Date(+b):new Date;if(!a)return b;var c=+a.value||0;if(c)return b.setTime(b.getTime()+c),b;(c=+a.milliseconds||0)&&b.setMilliseconds(b.getMilliseconds()+c);(c=+a.seconds||0)&&b.setSeconds(b.getSeconds()+
   c);(c=+a.minutes||0)&&b.setMinutes(b.getMinutes()+c);(c=+a.hours||0)&&b.setHours(b.getHours()+c);(c=+a.weeks||0)&&(c*=7);(c+=+a.days||0)&&b.setDate(b.getDate()+c);(c=+a.months||0)&&b.setMonth(b.getMonth()+c);(c=+a.millennia||0)&&(c*=10);(c+=+a.centuries||0)&&(c*=10);(c+=+a.decades||0)&&(c*=10);(c+=+a.years||0)&&b.setFullYear(b.getFullYear()+c);return b}function D(a,b){return y(a)+(1===a?p[b]:q[b])}function n(){}function k(a,b,c,e,l,d){0<=a[c]&&(b+=a[c],delete a[c]);b/=l;if(1>=b+1)return 0;if(0<=a[e]){a[e]=
@@ -24,11 +25,18 @@ var module,countdown=function(v){function A(a,b){var c=a.getTime();a.setMonth(a.
 
 
 $(document).ready(function() {
-  parallax.init();
   images.init();
   animatedElements.init();
   popup.init();
   time.init();
+  $slider.init();
+
+  $('.js-scrollTo').on('click',function(){
+    $('html, body').animate({
+        scrollTop: $($.attr(this, 'href')).offset().top
+    }, 500);
+    return false;
+  });
 })
 
 window.addEventListener('load',function(){
@@ -44,14 +52,6 @@ const $window = {
 }
 const $page = document.querySelector('.page-wrapper');
 
-let parallax = {
-  scene: $('.scene'),
-  init: function() {
-    this.scene.each(function() {
-      let parallaxInstance = new Parallax(this);
-    })
-  }
-}
 let animatedElements = {
   init: function() {
     $(document).on('mouseenter mouseleave touchstart touchend mousedown mouseup', '.js-animated', function(event) {
@@ -117,9 +117,9 @@ let images = {
   }
 }
 let time = {
-  $days: $('.discount-timer .days'),
-  $hours: $('.discount-timer .hours'),
-  $minutes: $('.discount-timer .minutes'),
+  $days: $('.discount-timer .days span'),
+  $hours: $('.discount-timer .hours span'),
+  $minutes: $('.discount-timer .minutes span'),
   init: function() {
     this.year = new Date().getFullYear();
     this.month = new Date().getMonth();
@@ -127,14 +127,51 @@ let time = {
 
     this.count = countdown(new Date(time.year,time.month,time.day+3),function(timer) {
       time.$days.text('0'+timer.days)
-      time.$hours.text(timer.hours)
-      time.$minutes.text(timer.minutes)
+      if(timer.hours<10) {
+        time.$hours.text('0'+timer.hours)
+      } else {
+        time.$hours.text(timer.hours)
+      }
+      if(timer.minutes<10) {
+        time.$minutes.text('0'+timer.minutes)
+      } else {
+        time.$minutes.text(timer.minutes)
+      }
       $('.discount-timer__top span').addClass('active');
       setTimeout(function() {
         $('.discount-timer__top span').removeClass('active');
       },200)
 
     }).toString();
+  }
+}
+let $slider = {
+  element: $('.slider-el'),
+  item: $('.slider-el__slide'),
+  init: function() {
+    this.length = this.item.length;
+    $slider.element.on('init beforeChange afterChange', function(currentSlide){
+      images.init();
+      console.log(currentSlide)
+    });
+    $slider.element.on('afterChange', function(currentSlide){
+      images.init();
+      let index = $(this).find('.slick-current').index();
+      $('.slider__item-title').fadeOut(300);
+      $('.slider__item-title').eq(index).fadeIn(300);
+    });
+    $slider.element.slick({
+      rows: 0,
+      slidesToShow:1,
+      infinite:false,
+      arrows: true,
+      speed:500,
+      touchThreshold:10,
+      autoplay:true,
+      autoplaySpeed:5000,
+      nextArrow: $('.sliderNext'),
+      prevArrow: $('.sliderPrev'),
+    });
   }
 }
 
@@ -154,9 +191,49 @@ let animate = {
     animate.section.each(function() {
       let pos = $(this).offset().top;
       if(animate.scroll>pos && !$(this).hasClass('animated')) {
-        if($(this).hasClass('presentation')) {
-          $(this).addClass('animated');
-          animate.presentationAnimation();
+        $(this).addClass('animated');
+        if($(this).is('.presentation')) {
+          let anim = gsap.timeline()
+            .to($('.presentation'), {duration:0,autoAlpha:1})
+            .fromTo($('.presentation-board__bg'), {xPercent:-100,autoAlpha:0}, {duration:1.5,xPercent:0,autoAlpha:1,ease:'power2.out'})
+            .fromTo($('.presentation-board__image'), {autoAlpha:0}, {duration:1.1,autoAlpha:1,ease:'power2.inOut',stagger:{amount:0.4}}, '-=1.5')
+            .fromTo($('.presentation-board__image'), {yPercent:100}, {duration:1.1,yPercent:0,ease:'power2.out',stagger:{amount:0.4}}, '-=1.5')
+            .fromTo($('.presentation__item'), {autoAlpha:0}, {duration:0.75,autoAlpha:1,ease:'power2.inOut',stagger:{amount:0.25}}, '-=1.5')
+            .fromTo($('.presentation__item'), {y:70,rotation:6}, {duration:0.75,y:0,rotation:0,ease:'power2.out',stagger:{amount:0.25}}, '-=1.5')
+        } 
+        else if($(this).is('.why')) {
+          let images = $(this).find('.img'),
+              title = $(this).find('.why__title'),
+              text = $(this).find('.why__text');
+              
+          let anim = gsap.timeline()
+            .to($(this), {duration:0,autoAlpha:1})
+            .fromTo(title, {autoAlpha:0}, {duration:1,autoAlpha:1,ease:'power2.inOut'}, '+=0.5')
+            .fromTo(title, {yPercent:50}, {duration:1,yPercent:0,ease:'power2.out'}, '-=1')
+            .fromTo(text, {autoAlpha:0}, {duration:1,autoAlpha:1,ease:'power2.inOut'}, '-=0.75')
+            .fromTo(text, {x:50}, {duration:1,x:0,ease:'power2.out'}, '-=1')
+            .fromTo(images, {autoAlpha:0}, {duration:0.75,autoAlpha:1,ease:'power2.inOut',stagger:{amount:0.25}}, '-=1')
+            .fromTo(images, {y:100}, {duration:0.75,y:0,ease:'power2.out',stagger:{amount:0.25}}, '-=1')
+        }
+        else if($(this).is('.b-section')) {
+          let anim = gsap.timeline()
+            .to($(this), {duration:0,autoAlpha:1})
+            .fromTo($('.b-section__item'), {autoAlpha:0}, {duration:0.75,autoAlpha:1,ease:'power2.inOut',stagger:{amount:0.25}})
+            .fromTo($('.b-section__item'), {y:70}, {duration:0.75,y:0,ease:'power2.out',stagger:{amount:0.25}}, '-=1')
+            .fromTo($('.b-section__decor:first-child .b-section__bg'), {autoAlpha:0}, {duration:0.75,autoAlpha:1,ease:'power2.inOut',stagger:{amount:0.25}}, '-=0.75')
+            .fromTo($('.b-section__decor:first-child .b-section__bg'), {x:30,scale:0.95}, {duration:0.75,x:0,scale:1,ease:'power2.out',stagger:{amount:0.25}}, '-=1')
+            .fromTo($('.b-section__decor:nth-child(2) .b-section__bg'), {autoAlpha:0}, {duration:0.75,autoAlpha:1,ease:'power2.inOut',stagger:{amount:0.25}}, '-=1')
+            .fromTo($('.b-section__decor:nth-child(2) .b-section__bg'), {x:-30,scale:0.95}, {duration:0.75,x:0,scale:1,ease:'power2.out',stagger:{amount:0.25}}, '-=1')
+        }
+        else if($(this).is('.slider')) {
+          let title = $('.slider__title'),
+              slider = $('.slider__content');
+          let anim = gsap.timeline()
+            .to($(this), {duration:0,autoAlpha:1})
+            .fromTo(title, {autoAlpha:0}, {duration:1,autoAlpha:1,ease:'power2.inOut'}, '+=0.5')
+            .fromTo(title, {yPercent:50}, {duration:1,yPercent:0,ease:'power2.out'}, '-=1')
+            .fromTo(slider, {autoAlpha:0}, {duration:1,autoAlpha:1,ease:'power2.inOut'}, '-=0.75')
+            .fromTo(slider, {y:50}, {duration:1,y:0,ease:'power2.out'}, '-=1')
         }
       }
     })
@@ -171,14 +248,6 @@ let animate = {
       .fromTo($('.home__img-cover .cover-box'), {xPercent:50,scale:1.5}, {duration:1,xPercent:0,scale:1,ease:'power2.inOut'}, '-=1')
       .fromTo($('.header'), {yPercent:-100,autoAlpha:0}, {duration:1,yPercent:0,autoAlpha:1,ease:'power2.inOut'}, '-=0.75')
       .fromTo($('.home__line'), {xPercent:-100,autoAlpha:0}, {duration:1,xPercent:0,autoAlpha:1,ease:'power2.inOut'}, '-=0.75')
-  },
-  presentationAnimation: function() {
-    let anim = gsap.timeline()
-      .fromTo($('.presentation-board__bg'), {xPercent:-100,autoAlpha:0}, {duration:1.5,xPercent:0,autoAlpha:1,ease:'power2.out'},'+=0.5')
-      .fromTo($('.presentation-board__image'), {autoAlpha:0}, {duration:1.1,autoAlpha:1,ease:'power2.inOut',stagger:{amount:0.4}}, '-=1.5')
-      .fromTo($('.presentation-board__image'), {yPercent:100}, {duration:1.1,yPercent:0,ease:'power2.out',stagger:{amount:0.4}}, '-=1.5')
-      .fromTo($('.presentation__item'), {autoAlpha:0}, {duration:0.75,autoAlpha:1,ease:'power2.inOut',stagger:{amount:0.25}}, '-=1.5')
-      .fromTo($('.presentation__item'), {y:70,rotation:6}, {duration:0.75,y:0,rotation:0,ease:'power2.out',stagger:{amount:0.25}}, '-=1.5')
   }
 }
 

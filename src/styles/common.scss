@@ -9,6 +9,8 @@ $colorC: #91381F;
 $colorD: #1F1F1E;
 $colorE: #656669; 
 $colorF: #FBF7F6;
+$colorG: #50A999;
+$colorH: #FDFCFB;
 
 
 //transition
@@ -37,6 +39,7 @@ body {
 .page-wrapper {
   position: relative;
   transition: opacity 1s;
+  overflow: hidden;
 }
 .container {
   margin: 0 auto;
@@ -44,13 +47,15 @@ body {
   padding: 0 20px;
   position: relative;
 }
-
-@media all and(max-width: 1440px) {
-  
+@media all and(max-width: 360px) {
+  .container {
+    padding: 0 15px;
+  }
 }
 
 @import "./partials/text";
 @import "./partials/ui";
+@import "../../node_modules/slick-carousel/slick/slick.scss";
 @import "./partials/header";
 @import "./partials/home";
 @import "./partials/sections";
