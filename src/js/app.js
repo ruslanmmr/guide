@@ -167,8 +167,8 @@ let $slider = {
       arrows: true,
       speed:500,
       touchThreshold:10,
-      autoplay:true,
-      autoplaySpeed:5000,
+      //autoplay:true,
+      //autoplaySpeed:5000,
       nextArrow: $('.sliderNext'),
       prevArrow: $('.sliderPrev'),
     });
