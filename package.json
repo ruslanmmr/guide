@@ -31,6 +31,7 @@
 		"webpack-stream": "^5.2.1"
 	},
 	"dependencies": {
+		"countdown": "^2.6.0",
 		"current-device": "^0.8.2",
 		"gsap": "^3.0.4",
 		"inputmask": "^5.0.0",

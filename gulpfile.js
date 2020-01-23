@@ -36,6 +36,45 @@ gulp.task("pug", function () {
 gulp.task("scripts", function () {
   return gulp.src("./src/js/app.js")
     .pipe(webpackStream({
+      mode: 'development',
+      performance: {
+        hints: false,
+        maxEntrypointSize: 1000,
+        maxAssetSize: 1000
+      },
+      output: {
+        filename: 'app.js',
+      },
+      module: {
+        rules: [{
+          test: /\.(js)$/,
+          exclude: /(node_modules)/,
+          loader: 'babel-loader',
+          options: {
+          presets: [
+                [
+                    "@babel/preset-env",
+                    {
+                      targets: {
+                          node: "8.10"
+                      }
+                    }
+                ]
+            ]
+          }
+        }]
+      }
+    }))
+    .pipe(rename({
+      suffix: ".min"
+    }))
+    .pipe(gulp.dest("./dest/js/"))
+    .pipe(debug({"title": "scripts"}))
+    .on("end", browsersync.reload);
+});
+gulp.task("prod", function () {
+  return gulp.src("./src/js/app.js")
+    .pipe(webpackStream({
       mode: 'production',
       performance: {
         hints: false,
@@ -168,32 +207,5 @@ gulp.task("default", gulp.series("clean",
   gulp.parallel("watch", "serve")
 ));
 
-//gulp deploy
-gulp.task("deploy", function () {
-  return gulp.src('./dest/**')
-    .pipe(rsync({
-      root: './dest/',
-      hostname: '92.53.96.11',
-      destination: '/home/c/ct60473/public_html/assets/components/project/dest',
-      username: 'ct60473',
-      archive: true,
-      silent: false,
-      compress: true
-  }));
-});
-// Qmt7usfjXrxg
-
-/* gulp.task("deploy", function () {
-  return gulp.src('./dest/**')
-    .pipe(rsync({
-      root: './dest/',
-      hostname: 'palmayasen.beget.tech',
-      destination: '/home/p/palmayasen/palmayasen.beget.tech/public_html/assets/components/project/dest',
-      username: 'palmayasen_test',
-      archive: true,
-      silent: false,
-      compress: true
-  }));
-}); */
 
 

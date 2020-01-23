@@ -1,0 +1,15 @@
+.popup#popup
+  .popup-item
+    .popup-item__container
+      .popup-item__head
+        span.popup-item__title Оставьте заявку
+        a(href="javascript:void(0)").button.popup-close.js-animated
+          i.fas.fa-times
+      .popup-item__content
+        form(action="#").popup-form
+          .popup-form__section
+            input(type="text" placeholder="Имя:").input.input_style1
+          .popup-form__section
+            input(type="email" placeholder="Email:").input.input_style1
+          .popup-form__section
+            button.button.button_style1.js-animated Отправить

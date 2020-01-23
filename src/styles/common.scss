@@ -2,15 +2,13 @@
 @import "./partials/fonts";
 
 //color
-$colorA: #6FDE9B;
-$colorB: #8e2424;
-$colorD: #1F1F1E; 
-
-
-//условные обозначения
-$station: $colorA;
-$factory: $colorB;
-$base: $colorC;
+$colorA: #A96450;
+$colorAA: #9c5845;
+$colorB: #FF1717;
+$colorC: #91381F;
+$colorD: #1F1F1E;
+$colorE: #656669; 
+$colorF: #FBF7F6;
 
 
 //transition
@@ -21,7 +19,8 @@ $font1: 'Montserrat', sans-serif;
 $font2: 'NocturneSerif', sans-serif;
 
 body {
-  font-family: $font1;
+  font-family: $font2;
+  font-weight: 300;
   font-size: 16px;
   min-width: 320px;
   color: $colorD;
@@ -53,5 +52,8 @@ body {
 @import "./partials/text";
 @import "./partials/ui";
 @import "./partials/header";
+@import "./partials/home";
+@import "./partials/sections";
+@import "./partials/footer";
 
 

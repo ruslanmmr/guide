@@ -1,0 +1,84 @@
+.home {
+  position: relative;
+  padding: 0 !important;
+  &__line {
+    position: absolute;
+    pointer-events: none;
+    width: 430px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-color: #E5E5E5;
+    height: 1px;
+  }
+  .old-price {
+    margin-right: 15px;
+  }
+  &__gbg {
+    position: absolute;
+    width: 400px;
+    top: 50%;
+    left: -10px;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  .discount-timer {
+    margin-top: 45px;
+  }
+  &__container {
+    position: relative;
+  }
+  &__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100vh;
+    max-height: 900px;
+    padding-top: 45px;
+    position: relative;
+    z-index: 2;
+  }
+  &__title {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    font-weight: bold;
+  }
+  &__sub-title {
+    font-family: $font2;
+  }
+  &__price {
+    margin-top: 40px;
+    .button {
+      margin-top: 8px;
+    }
+  }
+  &__m-img {
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+    height: 100%;
+  }
+  &__img-cover {
+    height: 100%;
+    overflow: hidden;
+  }
+}
+
+@media all and(min-width: 1024px) {
+  .home { 
+    min-height: 580px;
+  }
+  @media all and(max-height: 650px) {
+    .home {
+      &__title {
+        font-size: 36px;
+      }
+      &__price {
+        margin-top: 30px;
+      }
+      .discount-timer {
+        margin-top: 30px;
+      }
+    }
+  }
+}
