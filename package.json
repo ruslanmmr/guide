@@ -33,7 +33,7 @@
 	"dependencies": {
 		"countdown": "^2.6.0",
 		"current-device": "^0.8.2",
-		"gsap": "^3.0.4",
+		"gsap": "^3.6.0",
 		"inputmask": "^5.0.0",
 		"jquery": "^3.4.1",
 		"jquery-lazy": "^1.7.10",
